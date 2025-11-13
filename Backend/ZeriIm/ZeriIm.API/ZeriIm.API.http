@@ -1,0 +1,6 @@
+@ZeriIm.API_HostAddress = http://localhost:5119
+
+GET {{ZeriIm.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

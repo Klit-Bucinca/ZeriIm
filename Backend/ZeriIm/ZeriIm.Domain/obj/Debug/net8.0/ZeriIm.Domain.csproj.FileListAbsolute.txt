@@ -1,0 +1,12 @@
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\bin\Debug\net8.0\ZeriIm.Domain.deps.json
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\bin\Debug\net8.0\ZeriIm.Domain.dll
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\bin\Debug\net8.0\ZeriIm.Domain.pdb
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\obj\Debug\net8.0\ZeriIm.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\obj\Debug\net8.0\ZeriIm.Domain.AssemblyInfoInputs.cache
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\obj\Debug\net8.0\ZeriIm.Domain.AssemblyInfo.cs
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\obj\Debug\net8.0\ZeriIm.Domain.csproj.CoreCompileInputs.cache
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\obj\Debug\net8.0\ZeriIm.Domain.sourcelink.json
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\obj\Debug\net8.0\ZeriIm.Domain.dll
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\obj\Debug\net8.0\refint\ZeriIm.Domain.dll
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\obj\Debug\net8.0\ZeriIm.Domain.pdb
+C:\Users\klitb\OneDrive\Desktop\ZeriIm\ZeriIm\Backend\ZeriIm\ZeriIm.Domain\obj\Debug\net8.0\ref\ZeriIm.Domain.dll
