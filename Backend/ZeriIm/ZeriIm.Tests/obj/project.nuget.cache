@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bf0kmCbCWSA=",
+  "dgSpecHash": "0q8bfeek7fY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\klitb\\OneDrive\\Desktop\\ZeriIm\\ZeriIm\\Backend\\ZeriIm\\ZeriIm.Tests\\ZeriIm.Tests.csproj",
+  "projectFilePath": "C:\\Users\\klitb\\OneDrive\\Desktop\\ZeriImHexagonal Klit\\ZeriIm\\Backend\\ZeriIm\\ZeriIm.Tests\\ZeriIm.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\klitb\\.nuget\\packages\\coverlet.collector\\6.0.0\\coverlet.collector.6.0.0.nupkg.sha512",
     "C:\\Users\\klitb\\.nuget\\packages\\microsoft.codecoverage\\17.8.0\\microsoft.codecoverage.17.8.0.nupkg.sha512",

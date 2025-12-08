@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZeriIm.Ports")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+58abed99c42b97d6eb9a7959356ed60a35d2d0a6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZeriIm.Ports")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZeriIm.Ports")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
