@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZeriIm.Domain
+namespace ZeriIm.Domain.Users
 {
-    public class Citizen
+    public class Citizen:User
     {
         public int TotalPosts { get; set; }
         public int ReputationScore { get; set; }
