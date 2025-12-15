@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Zerilm.Domain.Posts.Enums;
+using ZeriIm.Domain.Posts.Enums;
 
-namespace Zerilm.Domain.Posts;
+namespace ZeriIm.Domain.Posts;
 
 public sealed class Vote
 {

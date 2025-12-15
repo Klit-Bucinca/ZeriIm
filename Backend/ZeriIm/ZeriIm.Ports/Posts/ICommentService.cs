@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Zerilm.Ports.Posts.Models;
+using ZeriIm.Ports.Posts.Models;
 
-namespace Zerilm.Ports.Posts;
+namespace ZeriIm.Ports.Posts;
 
 public interface ICommentService
 {

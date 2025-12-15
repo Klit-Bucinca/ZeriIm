@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ZeriIm.Domain\ZeriIm.Domain.csproj" />
+    <ProjectReference Include="..\ZeriIm.Ports\ZeriIm.Ports.csproj" />
   </ItemGroup>
 
 </Project>

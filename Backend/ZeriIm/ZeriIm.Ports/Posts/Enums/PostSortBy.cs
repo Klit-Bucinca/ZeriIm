@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Zerilm.Ports.Posts.Enums;
+namespace ZeriIm.Ports.Posts.Enums;
 
 public enum PostSortBy
 {

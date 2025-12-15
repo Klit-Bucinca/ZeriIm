@@ -24,21 +24,27 @@ public sealed class PostService : IPostService
 
     public async Task<Guid> CreateAsync(CreatePostRequest request, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(request.Title))
-            throw new ArgumentException("Title is required.", nameof(request.Title));
-
-        if (!request.ImageUrls.Any())
-            throw new ArgumentException("At least one image is required.", nameof(request.ImageUrls));
-
         var category = await _categories.GetByIdAsync(request.CategoryId, ct);
         if (category is null)
             throw new InvalidOperationException("Category not found.");
 
+        if (string.IsNullOrWhiteSpace(request.Content))
+            throw new ArgumentException("Content is required.", nameof(request.Content));
+
+        if (request.MunicipalityId == Guid.Empty || string.IsNullOrWhiteSpace(request.MunicipalityName))
+            throw new ArgumentException("Municipality is required.", nameof(request.MunicipalityId));
+
+        var derivedTitle = string.IsNullOrWhiteSpace(request.Title)
+            ? request.Content.Length > 60
+                ? request.Content.Substring(0, 60)
+                : request.Content
+            : request.Title;
+
         var post = Post.Create(
             request.AuthorId,
             request.CategoryId,
-            request.Municipality,
-            request.Title,
+            request.MunicipalityName,
+            derivedTitle,
             request.Content,
             request.ImageUrls);
 
@@ -78,6 +84,8 @@ public sealed class PostService : IPostService
         var post = await _posts.GetByIdAsync(postId, ct);
         if (post is null) return null;
 
+        var category = await _categories.GetByIdAsync(post.CategoryId, ct);
+
         // For now hardcode AuthorName & CategoryName, you can integrate with other modules later
         return new PostDetailsDto
         {
@@ -87,9 +95,10 @@ public sealed class PostService : IPostService
             Title = post.Title,
             Content = post.Content,
             Municipality = post.Municipality,
-            CategoryName = "Unknown",
+            CategoryName = category?.Name ?? "Unknown",
             Score = post.Score,
             ImageUrls = post.Images.OrderBy(i => i.Order).Select(i => i.Url).ToList(),
+            ThumbnailUrl = post.Images.OrderBy(i => i.Order).FirstOrDefault()?.Url ?? string.Empty,
             CreatedAt = post.CreatedAt,
             UpdatedAt = post.UpdatedAt,
             Comments = MapComments(post.Comments)
@@ -100,16 +109,21 @@ public sealed class PostService : IPostService
     {
         var result = await _posts.SearchAsync(criteria, ct);
 
+        var categories = await _categories.ListAsync(ct);
+        var categoryLookup = categories.ToDictionary(c => c.Id, c => c.Name);
+
         var summaries = result.Items.Select(p => new PostSummaryDto
         {
             Id = p.Id,
             Title = p.Title,
+            Content = p.Content,
             Municipality = p.Municipality,
-            CategoryName = "Unknown",
+            CategoryName = categoryLookup.TryGetValue(p.CategoryId, out var name) ? name : "Unknown",
             Score = p.Score,
             CommentCount = p.Comments.Count,
             CreatedAt = p.CreatedAt,
-            ThumbnailUrl = p.Images.OrderBy(i => i.Order).First().Url
+            ImageUrls = p.Images.OrderBy(i => i.Order).Select(i => i.Url).ToList(),
+            ThumbnailUrl = p.Images.OrderBy(i => i.Order).FirstOrDefault()?.Url ?? string.Empty
         });
 
         return new PagedResult<PostSummaryDto>(summaries, result.Page, result.PageSize, result.TotalCount);

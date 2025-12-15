@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Zerilm.Ports.Posts.Models;
+namespace ZeriIm.Ports.Posts.Models;
 
 public sealed class PostDetailsDto
 {
@@ -20,4 +20,5 @@ public sealed class PostDetailsDto
     public DateTime CreatedAt { get; init; }
     public DateTime? UpdatedAt { get; init; }
     public IReadOnlyCollection<CommentDto> Comments { get; init; } = Array.Empty<CommentDto>();
+    public string ThumbnailUrl { get; init; } = string.Empty;
 }

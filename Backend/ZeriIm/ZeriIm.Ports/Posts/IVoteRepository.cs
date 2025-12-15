@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Zerilm.Domain.Posts;
+using ZeriIm.Domain.Posts;
 
-namespace Zerilm.Ports.Posts;
+namespace ZeriIm.Ports.Posts;
 
 public interface IVoteRepository
 {

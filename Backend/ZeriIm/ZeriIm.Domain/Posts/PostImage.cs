@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Zerilm.Domain.Posts;
+namespace ZeriIm.Domain.Posts;
 
 public sealed class PostImage
 {

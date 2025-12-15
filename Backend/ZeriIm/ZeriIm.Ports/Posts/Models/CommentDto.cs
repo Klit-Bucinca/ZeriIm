@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Zerilm.Ports.Posts.Models;
+namespace ZeriIm.Ports.Posts.Models;
 
 public sealed class CommentDto
 {

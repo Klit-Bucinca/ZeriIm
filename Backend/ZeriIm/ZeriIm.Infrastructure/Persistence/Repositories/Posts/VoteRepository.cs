@@ -13,9 +13,9 @@ namespace ZeriIm.Infrastructure.Repositories.Posts;
 
 public class VoteRepository : IVoteRepository
 {
-    private readonly ZerilmDbContext _db;
+    private readonly ZeriImDbContext _db;
 
-    public VoteRepository(ZerilmDbContext db) => _db = db;
+    public VoteRepository(ZeriImDbContext db) => _db = db;
 
     public async Task<Vote?> GetUserVoteAsync(Guid postId, Guid userId, CancellationToken ct = default)
     {

@@ -6,9 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ZeriIm.Application\ZeriIm.Application.csproj" />
-    <ProjectReference Include="..\ZeriIm.Domain\ZeriIm.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ZeriIm.Domain\ZeriIm.Domain.csproj" />
+	</ItemGroup>
+
 
 </Project>

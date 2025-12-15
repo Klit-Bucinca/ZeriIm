@@ -21,19 +21,19 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
         builder.Property(p => p.Content).IsRequired();
 
         builder
-            .HasMany(typeof(Comment), "_comments")
+            .HasMany(p => p.Comments)
             .WithOne()
             .HasForeignKey(nameof(Comment.PostId))
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder
-            .HasMany(typeof(Vote), "_votes")
+            .HasMany(p => p.Votes)
             .WithOne()
             .HasForeignKey(nameof(Vote.PostId))
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasMany(typeof(PostImage), "_images")
+            .HasMany(p => p.Images)
             .WithOne()
             .HasForeignKey(nameof(PostImage.PostId))
             .OnDelete(DeleteBehavior.Cascade);

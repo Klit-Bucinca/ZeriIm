@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Zerilm.Ports.Posts.Enums;
+using ZeriIm.Ports.Posts.Enums;
 
-namespace Zerilm.Ports.Posts.Models;
+namespace ZeriIm.Ports.Posts.Models;
 
 public sealed class PostSearchCriteria
 {

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Zerilm.Domain.Posts;
-using Zerilm.Ports.Posts.Models;
-using Zerilm.Ports.Shared;
+using ZeriIm.Domain.Posts;
+using ZeriIm.Ports.Posts.Models;
+using ZeriIm.Ports.Shared;
 
-namespace Zerilm.Ports.Posts;
+namespace ZeriIm.Ports.Posts;
 
 public interface IPostRepository
 {

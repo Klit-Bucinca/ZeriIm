@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Zerilm.Ports.Posts.Models;
+namespace ZeriIm.Ports.Posts.Models;
 
-public sealed class UpdatePostRequest
+public sealed record UpdatePostRequest
 {
     public Guid PostId { get; init; }
     public Guid CurrentUserId { get; init; }

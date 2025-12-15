@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Zerilm.Domain.Posts.Enums;
+using ZeriIm.Domain.Posts.Enums;
 
-namespace Zerilm.Domain.Posts;
+namespace ZeriIm.Domain.Posts;
 
 public sealed class Post
 {
@@ -51,9 +51,6 @@ public sealed class Post
         CreatedAt = DateTime.UtcNow;
 
         var urls = imageUrls.ToList();
-        if (!urls.Any())
-            throw new ArgumentException("Post must have at least one image.", nameof(imageUrls));
-
         for (var i = 0; i < urls.Count; i++)
         {
             _images.Add(new PostImage(Id, urls[i], i));
@@ -96,9 +93,6 @@ public sealed class Post
     public void SetImages(IEnumerable<string> imageUrls)
     {
         var urls = imageUrls.ToList();
-        if (!urls.Any())
-            throw new ArgumentException("Post must have at least one image.");
-
         _images.Clear();
         for (var i = 0; i < urls.Count; i++)
         {
@@ -110,9 +104,9 @@ public sealed class Post
 
     // These helpers will be used from Application layer:
 
-    internal void AddVote(Vote vote) => _votes.Add(vote);
+    public void AddVote(Vote vote) => _votes.Add(vote);
 
-    internal void RemoveVote(Vote vote) => _votes.Remove(vote);
+    public void RemoveVote(Vote vote) => _votes.Remove(vote);
 
-    internal void AddComment(Comment comment) => _comments.Add(comment);
+    public void AddComment(Comment comment) => _comments.Add(comment);
 }

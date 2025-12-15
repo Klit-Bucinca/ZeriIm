@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Zerilm.Domain.Posts.Enums;
+using ZeriIm.Domain.Posts.Enums;
 
-namespace Zerilm.Ports.Posts;
+namespace ZeriIm.Ports.Posts;
 
 public interface IVoteService
 {

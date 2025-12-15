@@ -13,9 +13,10 @@ namespace ZeriIm.Infrastructure.Repositories.Posts;
 
 public class CommentRepository : ICommentRepository
 {
-    private readonly ZerilmDbContext _db;
+    private readonly
+        ZeriImDbContext _db;
 
-    public CommentRepository(ZerilmDbContext db) => _db = db;
+    public CommentRepository(ZeriImDbContext db) => _db = db;
 
     public async Task<Comment?> GetByIdAsync(Guid id, CancellationToken ct = default)
     {

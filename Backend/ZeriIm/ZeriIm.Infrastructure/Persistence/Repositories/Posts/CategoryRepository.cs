@@ -13,12 +13,17 @@ namespace ZeriIm.Infrastructure.Repositories.Posts;
 
 public class CategoryRepository : ICategoryRepository
 {
-    private readonly ZerilmDbContext _db;
+    private readonly ZeriImDbContext _db;
 
-    public CategoryRepository(ZerilmDbContext db) => _db = db;
+    public CategoryRepository(ZeriImDbContext db) => _db = db;
 
     public async Task<Category?> GetByIdAsync(Guid id, CancellationToken ct = default)
     {
         return await _db.Categories.FirstOrDefaultAsync(c => c.Id == id, ct);
+    }
+
+    public async Task<IReadOnlyList<Category>> ListAsync(CancellationToken ct = default)
+    {
+        return await _db.Categories.AsNoTracking().OrderBy(c => c.Name).ToListAsync(ct);
     }
 }

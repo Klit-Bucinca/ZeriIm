@@ -10,9 +10,9 @@ using ZeriIm.Domain.Posts;
 
 namespace ZeriIm.Infrastructure.Persistence;
 
-public class ZerilmDbContext : DbContext
+public class ZeriImDbContext : DbContext
 {
-    public ZerilmDbContext(DbContextOptions<ZerilmDbContext> options) : base(options) { }
+    public ZeriImDbContext(DbContextOptions<ZeriImDbContext> options) : base(options) { }
 
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<Comment> Comments => Set<Comment>();
@@ -22,7 +22,7 @@ public class ZerilmDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ZerilmDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ZeriImDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
     }
 }

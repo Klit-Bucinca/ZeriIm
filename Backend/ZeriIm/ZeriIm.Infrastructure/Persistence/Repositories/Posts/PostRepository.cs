@@ -16,9 +16,9 @@ namespace ZeriIm.Infrastructure.Repositories.Posts;
 
 public class PostRepository : IPostRepository
 {
-    private readonly ZerilmDbContext _db;
+    private readonly ZeriImDbContext _db;
 
-    public PostRepository(ZerilmDbContext db) => _db = db;
+    public PostRepository(ZeriImDbContext db) => _db = db;
 
     public async Task<Post?> GetByIdAsync(Guid id, CancellationToken ct = default)
     {
