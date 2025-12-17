@@ -8,6 +8,7 @@ using ZeriIm.Domain.Users;
 using ZeriIm.Infrastructure.Persistence;
 
 using Microsoft.EntityFrameworkCore;
+using ZeriIm.Domain;
 
 
 namespace ZeriIm.Infrastructure.Repositories

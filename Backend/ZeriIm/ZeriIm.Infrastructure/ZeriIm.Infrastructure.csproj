@@ -7,10 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+ 
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.15.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ZeriIm.Adapters\ZeriIm.Adapters.csproj" />
     <ProjectReference Include="..\ZeriIm.Application\ZeriIm.Application.csproj" />
     <ProjectReference Include="..\ZeriIm.Domain\ZeriIm.Domain.csproj" />
     <ProjectReference Include="..\ZeriIm.Ports\ZeriIm.Ports.csproj" />
   </ItemGroup>
+
+	
 
 </Project>

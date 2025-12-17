@@ -1,19 +1,25 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-
-using Microsoft.EntityFrameworkCore;
+using ZeriIm.Domain;
 using ZeriIm.Domain.Posts;
+using ZeriIm.Domain.Users; // ✅ SHTUAR
 
 namespace ZeriIm.Infrastructure.Persistence;
 
 public class ZeriImDbContext : DbContext
 {
-    public ZeriImDbContext(DbContextOptions<ZeriImDbContext> options) : base(options) { }
+    public ZeriImDbContext(DbContextOptions<ZeriImDbContext> options)
+        : base(options) { }
 
+    // ================= USERS =================
+    public DbSet<User> Users => Set<User>(); // ✅ SHTUAR
+
+    // ================= POSTS =================
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<Vote> Votes => Set<Vote>();
@@ -26,4 +32,3 @@ public class ZeriImDbContext : DbContext
         base.OnModelCreating(modelBuilder);
     }
 }
-

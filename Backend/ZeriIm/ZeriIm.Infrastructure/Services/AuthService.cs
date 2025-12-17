@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeriIm.Application.DTOs.Auth;
 using ZeriIm.Application.Interfaces;
-using ZeriIm.Domain.Users;
+using ZeriIm.Domain;
 
 using Microsoft.Extensions.Configuration;
 using BCrypt.Net;
