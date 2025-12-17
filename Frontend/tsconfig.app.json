@@ -7,8 +7,8 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
+    /* Resolution fix për React Router v6 + .mts */
+    "moduleResolution": "Node",
     "allowImportingTsExtensions": true,
     "allowJs": true,
     "isolatedModules": true,
@@ -21,7 +21,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"]
 }
