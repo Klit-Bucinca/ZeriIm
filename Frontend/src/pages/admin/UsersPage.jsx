@@ -8,6 +8,7 @@ const UsersPage = () => {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({ username: '', email: '', role: '' });
   const [saving, setSaving] = useState(false);
+  const [search, setSearch] = useState('');
 
   const load = async () => {
     setLoading(true);
@@ -28,11 +29,11 @@ const UsersPage = () => {
   }, []);
 
   const startEdit = (u) => {
-    setEditingId(u.id);
+    setEditingId(u.id || u.Id);
     setForm({
-      username: u.username || '',
-      email: u.email || '',
-      role: u.role || 'Citizen',
+      username: u.username || u.Username || '',
+      email: u.email || u.Email || '',
+      role: u.role || u.Role || 'Citizen',
     });
   };
 
@@ -72,12 +73,35 @@ const UsersPage = () => {
     }
   };
 
+  const normalize = (text) => (text || '').toString().toLowerCase();
+  const filteredUsers = users
+    .filter((u) => {
+      if (!search.trim()) return true;
+      const term = normalize(search);
+      return (
+        normalize(u.username || u.Username).includes(term) ||
+        normalize(u.email || u.Email).includes(term) ||
+        normalize(u.role || u.Role).includes(term)
+      );
+    })
+    .sort((a, b) => (a.username || a.Username || '').localeCompare(b.username || b.Username || ''));
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Përdoruesit</h1>
       <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
         Menaxho përdoruesit: shiko, redakto dhe fshi.
       </p>
+
+      <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Kërko me emër, email ose rol..."
+          className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 shadow-theme-xs focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+        />
+      </div>
 
       {error && (
         <div className="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/40 dark:text-red-200">
@@ -107,7 +131,7 @@ const UsersPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {users.map((u) => {
+              {filteredUsers.map((u) => {
                 const isEditing = editingId === u.id || editingId === u.Id;
                 const id = u.id || u.Id;
                 return (
@@ -191,7 +215,7 @@ const UsersPage = () => {
                   </tr>
                 );
               })}
-              {users.length === 0 && (
+              {filteredUsers.length === 0 && (
                 <tr>
                   <td colSpan={4} className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
                     Nuk ka përdorues.

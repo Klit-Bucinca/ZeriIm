@@ -77,6 +77,7 @@ const CommentThread = ({
   onDelete,
   userId,
   currentUserName,
+  isAdmin,
 }) => {
   if (!comments || comments.length === 0) return null;
 
@@ -165,6 +166,7 @@ const CommentThread = ({
                 onDelete={onDelete}
                 userId={userId}
                 currentUserName={currentUserName}
+                isAdmin={isAdmin}
               />
             </div>
           )}
@@ -383,6 +385,7 @@ const PostDetailsPage = () => {
               onDelete={handleDeleteComment}
               userId={userId}
               currentUserName={currentUserName}
+              isAdmin={isAdmin}
             />
           ) : (
             <p className="text-sm text-gray-600 dark:text-gray-300">

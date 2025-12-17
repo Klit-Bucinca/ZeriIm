@@ -17,6 +17,7 @@ import { AuthProvider } from "./context/AuthContext";
 import AppLayout from "./layout/AppLayout";
 import UsersPage from "./pages/admin/UsersPage";
 import MunicipalitiesPage from "./pages/admin/MunicipalitiesPage";
+import CategoriesPage from "./pages/admin/CategoriesPage";
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<UsersPage />} />
               <Route path="/municipalities" element={<MunicipalitiesPage />} />
+              <Route path="/categories" element={<CategoriesPage />} />
             </Route>
           </Route>
 

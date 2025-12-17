@@ -12,7 +12,8 @@ export const createPost = (payload, config) =>
 export const updatePost = (id, payload) =>
   axiosClient.put(`/api/Posts/${id}`, payload);
 
-export const deletePost = (id) => axiosClient.delete(`/api/Posts/${id}`);
+export const deletePost = (id, params) =>
+  axiosClient.delete(`/api/Posts/${id}`, { params });
 
 export default {
   getPosts,

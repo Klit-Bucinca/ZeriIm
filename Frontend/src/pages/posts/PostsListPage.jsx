@@ -5,6 +5,7 @@ import PostComposerPreview from '../../components/posts/PostComposerPreview';
 import CreatePostModal from '../../components/posts/CreatePostModal';
 import { useAuth } from '../../context/AuthContext';
 import { getMunicipalities } from '../../api/municipalityService';
+import { getCategories } from '../../api/categoryService';
 
 const PAGE_SIZE = 10;
 
@@ -51,6 +52,7 @@ const PostsListPage = () => {
   const [municipality, setMunicipality] = useState('');
   const [municipalityOptions, setMunicipalityOptions] = useState([]);
   const [categoryId, setCategoryId] = useState('');
+  const [categoryOptions, setCategoryOptions] = useState([]);
   const [sortBy, setSortBy] = useState('Newest');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -90,6 +92,10 @@ const PostsListPage = () => {
     getMunicipalities()
       .then(({ data }) => setMunicipalityOptions(Array.isArray(data) ? data : []))
       .catch(() => setMunicipalityOptions([]));
+
+    getCategories()
+      .then(({ data }) => setCategoryOptions(Array.isArray(data) ? data : []))
+      .catch(() => setCategoryOptions([]));
     fetchPosts(page);
   }, [page, fetchPosts]);
 
@@ -167,9 +173,14 @@ const PostsListPage = () => {
           onChange={handleCategoryChange}
           className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 shadow-theme-xs focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white"
         >
-          <option value="" disabled>
-            Zgjidh kategorine (placeholder)
+          <option value="">
+            Të gjitha kategoritë
           </option>
+          {categoryOptions.map((c) => (
+            <option key={c.Id || c.id} value={c.Id || c.id}>
+              {c.Name || c.name}
+            </option>
+          ))}
         </select>
         <select
           value={sortBy}

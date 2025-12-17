@@ -13,6 +13,7 @@ const navItems: NavItem[] = [
   { name: "Postimet", icon: <PageIcon />, path: "/posts" },
   { name: "Përdoruesit", icon: <GridIcon />, path: "/dashboard" },
   { name: "Komunat", icon: <GridIcon />, path: "/municipalities" },
+  { name: "Kategorite", icon: <GridIcon />, path: "/categories" },
 ];
 
 const AppSidebar: React.FC = () => {
@@ -94,7 +95,7 @@ const AppSidebar: React.FC = () => {
                   to={item.path}
                   className={`flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium transition ${
                     active
-                      ? "bg-primary text-white"
+                      ? "bg-primary/10 text-primary border border-primary/30"
                       : "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   }`}
                 >
