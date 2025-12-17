@@ -6,7 +6,7 @@ import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
 import FileInput from "../form/input/FileInput";
-import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 
 export default function SignUpForm() {
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ export default function SignUpForm() {
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [errors, setErrors] = useState<any>({});
   const [serverError, setServerError] = useState<string | null>(null);
+  const { register, loading } = useAuth();
 
   const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
   const MAX_SIZE = 2 * 1024 * 1024; // 2MB
@@ -70,31 +71,18 @@ export default function SignUpForm() {
 
     if (!validate()) return;
 
-    try {
-      const data = new FormData();
-      // Backend pret Username, Email, Password, ProfileImage
-      data.append("Username", form.username);
-      data.append("Email", form.email);
-      data.append("Password", form.password);
-      if (profileImage) data.append("ProfileImage", profileImage);
+    const data = new FormData();
+    data.append("Username", form.username);
+    data.append("Email", form.email);
+    data.append("Password", form.password);
+    if (profileImage) data.append("ProfileImage", profileImage);
 
-      const res = await axios.post(
-        "https://localhost:7038/scalar/v1/auth/register",
-        data,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-
-      if (res.data.success) {
-        navigate("/signin");
-      } else {
-        setServerError(res.data.message || "Something went wrong");
-      }
-    } catch (err: any) {
-      console.error(err);
-      setServerError(
-        err.response?.data?.message || "Server error. Try again later."
-      );
+    const result = await register(data);
+    if (!result.success) {
+      setServerError(result.message || "Server error. Provo përsëri.");
+      return;
     }
+    navigate("/signin");
   };
 
   // ===================== JSX =====================
@@ -235,8 +223,12 @@ export default function SignUpForm() {
 
               {/* SUBMIT */}
               <div>
-                <button className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
-                  Sign Up
+                <button
+                  className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 disabled:opacity-70"
+                  disabled={loading}
+                  type="submit"
+                >
+                  {loading ? "Duke u regjistruar..." : "Regjistrohu"}
                 </button>
               </div>
             </div>

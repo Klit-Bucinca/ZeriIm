@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZeriIm.Application.Interfaces;
-using ZeriIm.Domain.Users;
+﻿using Microsoft.EntityFrameworkCore;
+using ZeriIm.Domain.Entities;
 using ZeriIm.Infrastructure.Persistence;
-
-using Microsoft.EntityFrameworkCore;
-using ZeriIm.Domain;
+using ZeriIm.Ports.Outbound;
 
 
 namespace ZeriIm.Infrastructure.Repositories

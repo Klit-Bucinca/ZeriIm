@@ -1,38 +1,33 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using ZeriIm.Application.Interfaces;
 
-namespace ZeriIm.Infrastructure.Services
+namespace ZeriIm.Infrastructure.Services;
+
+public class ImageService : IImageService
 {
-    public class ImageService : IImageService
+    private readonly IHostEnvironment _env;
+
+    public ImageService(IHostEnvironment env)
     {
-        private readonly IHostEnvironment _env;
+        _env = env;
+    }
 
-        public ImageService(IHostEnvironment env)
-        {
-            _env = env;
-        }
+    public async Task<string> SaveProfileImageAsync(IFormFile image, Guid userId)
+    {
+        if (image == null || image.Length == 0)
+            throw new Exception("Invalid image");
 
-        public async Task<string> SaveProfileImageAsync(IFormFile image, Guid userId)
-        {
-            if (image == null || image.Length == 0)
-                throw new Exception("Invalid image");
+        string uploadsFolder = Path.Combine(_env.ContentRootPath, "Uploads/profile-images");
+        if (!Directory.Exists(uploadsFolder))
+            Directory.CreateDirectory(uploadsFolder);
 
-            string uploadsFolder = Path.Combine(
-                _env.ContentRootPath,
-                "Uploads/profile-images"
-            );
+        string fileName = $"{userId}_{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+        string filePath = Path.Combine(uploadsFolder, fileName);
 
-            if (!Directory.Exists(uploadsFolder))
-                Directory.CreateDirectory(uploadsFolder);
+        await using var stream = new FileStream(filePath, FileMode.Create);
+        await image.CopyToAsync(stream);
 
-            string fileName = $"{userId}_{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-            string filePath = Path.Combine(uploadsFolder, fileName);
-
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await image.CopyToAsync(stream);
-
-            return $"uploads/profile-images/{fileName}";
-        }
+        return $"profile-images/{fileName}";
     }
 }

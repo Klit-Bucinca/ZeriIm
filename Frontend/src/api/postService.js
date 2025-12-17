@@ -3,7 +3,8 @@ import axiosClient from './axiosClient';
 export const getPosts = (criteria) =>
   axiosClient.get('/api/Posts', { params: criteria });
 
-export const getPostById = (id) => axiosClient.get(`/api/Posts/${id}`);
+export const getPostById = (id, params) =>
+  axiosClient.get(`/api/Posts/${id}`, { params });
 
 export const createPost = (payload, config) =>
   axiosClient.post('/api/Posts', payload, config);

@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ZeriIm.Application.DTOs.Auth
-
 {
     public class RegisterUserDto
     {
@@ -9,6 +13,5 @@ namespace ZeriIm.Application.DTOs.Auth
         public string Email { get; set; }
         public string Password { get; set; }
         public IFormFile ProfileImage { get; set; }
-
     }
 }

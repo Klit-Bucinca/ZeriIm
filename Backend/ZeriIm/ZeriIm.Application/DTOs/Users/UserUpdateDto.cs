@@ -12,4 +12,5 @@ namespace ZeriIm.Application.DTOs.Users
         public string Email { get; set; }
         public string Role { get; set; }
     }
+
 }

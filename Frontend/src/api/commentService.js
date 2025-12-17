@@ -6,7 +6,10 @@ export const createComment = (payload) =>
 export const updateComment = (id, payload) =>
   axiosClient.put(`/api/Comments/${id}`, payload);
 
-export const deleteComment = (id) => axiosClient.delete(`/api/Comments/${id}`);
+export const deleteComment = (id, params) =>
+  axiosClient.delete(`/api/Comments/${id}`, {
+    params,
+  });
 
 export default {
   createComment,

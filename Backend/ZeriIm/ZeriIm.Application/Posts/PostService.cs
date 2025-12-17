@@ -15,11 +15,13 @@ public sealed class PostService : IPostService
 {
     private readonly IPostRepository _posts;
     private readonly ICategoryRepository _categories;
+    private readonly IUserRepository _users;
 
-    public PostService(IPostRepository posts, ICategoryRepository categories)
+    public PostService(IPostRepository posts, ICategoryRepository categories, IUserRepository users)
     {
         _posts = posts;
         _categories = categories;
+        _users = users;
     }
 
     public async Task<Guid> CreateAsync(CreatePostRequest request, CancellationToken ct = default)
@@ -86,26 +88,40 @@ public sealed class PostService : IPostService
 
         var category = await _categories.GetByIdAsync(post.CategoryId, ct);
 
+        var authorIds = new HashSet<Guid> { post.AuthorId };
+        CollectAuthorIds(post.Comments, authorIds);
+
+        var authorNames = new Dictionary<Guid, string>();
+        foreach (var id in authorIds)
+        {
+            var user = await _users.GetByIdAsync(id);
+            var name = user?.Username ?? user?.Email ?? "Unknown";
+            authorNames[id] = string.IsNullOrWhiteSpace(name) ? "Unknown" : name;
+        }
+
         // For now hardcode AuthorName & CategoryName, you can integrate with other modules later
         return new PostDetailsDto
         {
             Id = post.Id,
             AuthorId = post.AuthorId,
-            AuthorName = "Unknown",
+            AuthorName = authorNames.TryGetValue(post.AuthorId, out var an) ? an : "Unknown",
             Title = post.Title,
             Content = post.Content,
             Municipality = post.Municipality,
             CategoryName = category?.Name ?? "Unknown",
             Score = post.Score,
+            UserVote = currentUserId.HasValue
+                ? (int?)(post.Votes.FirstOrDefault(v => v.UserId == currentUserId.Value)?.Type) ?? 0
+                : 0,
             ImageUrls = post.Images.OrderBy(i => i.Order).Select(i => i.Url).ToList(),
             ThumbnailUrl = post.Images.OrderBy(i => i.Order).FirstOrDefault()?.Url ?? string.Empty,
             CreatedAt = post.CreatedAt,
             UpdatedAt = post.UpdatedAt,
-            Comments = MapComments(post.Comments)
+            Comments = MapComments(post.Comments, authorNames)
         };
     }
 
-    public async Task<PagedResult<PostSummaryDto>> SearchAsync(PostSearchCriteria criteria, CancellationToken ct = default)
+    public async Task<PagedResult<PostSummaryDto>> SearchAsync(PostSearchCriteria criteria, Guid? currentUserId = default, CancellationToken ct = default)
     {
         var result = await _posts.SearchAsync(criteria, ct);
 
@@ -120,6 +136,9 @@ public sealed class PostService : IPostService
             Municipality = p.Municipality,
             CategoryName = categoryLookup.TryGetValue(p.CategoryId, out var name) ? name : "Unknown",
             Score = p.Score,
+            UserVote = currentUserId.HasValue
+                ? (int?)(p.Votes.FirstOrDefault(v => v.UserId == currentUserId.Value)?.Type) ?? 0
+                : 0,
             CommentCount = p.Comments.Count,
             CreatedAt = p.CreatedAt,
             ImageUrls = p.Images.OrderBy(i => i.Order).Select(i => i.Url).ToList(),
@@ -129,25 +148,37 @@ public sealed class PostService : IPostService
         return new PagedResult<PostSummaryDto>(summaries, result.Page, result.PageSize, result.TotalCount);
     }
 
-    private static IReadOnlyCollection<CommentDto> MapComments(IEnumerable<Comment> comments)
+    private static void CollectAuthorIds(IEnumerable<Comment> comments, HashSet<Guid> ids)
+    {
+        foreach (var c in comments)
+        {
+            ids.Add(c.AuthorId);
+            if (c.Replies is { Count: > 0 })
+            {
+                CollectAuthorIds(c.Replies, ids);
+            }
+        }
+    }
+
+    private static IReadOnlyCollection<CommentDto> MapComments(IEnumerable<Comment> comments, IReadOnlyDictionary<Guid, string> authorNames)
         => comments
             .Where(c => c.ParentCommentId is null)
             .OrderBy(c => c.CreatedAt)
-            .Select(MapCommentWithReplies)
+            .Select(c => MapCommentWithReplies(c, authorNames))
             .ToList();
 
-    private static CommentDto MapCommentWithReplies(Comment c)
+    private static CommentDto MapCommentWithReplies(Comment c, IReadOnlyDictionary<Guid, string> authorNames)
     {
         return new CommentDto
         {
             Id = c.Id,
             AuthorId = c.AuthorId,
-            AuthorName = "Unknown",
+            AuthorName = "Anonim",
             Content = c.Content,
             IsEdited = c.IsEdited,
             CreatedAt = c.CreatedAt,
             UpdatedAt = c.UpdatedAt,
-            Replies = c.Replies.Select(MapCommentWithReplies).ToList()
+            Replies = c.Replies.Select(r => MapCommentWithReplies(r, authorNames)).ToList()
         };
     }
 }

@@ -1,7 +1,9 @@
-import { Link, NavLink } from 'react-router-dom';
+﻿import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const SocialNavbar = () => {
-  const isAuthed = false; // mock auth flag
+  const navigate = useNavigate();
+  const { isAuthenticated, isAdmin, logout } = useAuth();
 
   const navClass = ({ isActive }) =>
     `px-3 py-2 text-sm font-medium ${
@@ -25,16 +27,24 @@ const SocialNavbar = () => {
           <NavLink to="/posts" className={navClass}>
             Shfleto
           </NavLink>
+          {isAdmin && (
+            <NavLink to="/dashboard" className={navClass}>
+              Admin
+            </NavLink>
+          )}
         </nav>
         <div className="flex items-center gap-3">
-          {isAuthed ? (
-            <div className="relative">
+          {isAuthenticated ? (
+            <div className="flex items-center gap-3">
               <button
                 type="button"
-                className="flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+                onClick={() => {
+                  logout();
+                  navigate('/signin');
+                }}
+                className="rounded-full border border-primary px-4 py-1.5 text-sm font-semibold text-primary transition hover:bg-primary hover:text-white"
               >
-                <span className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700" />
-                <span>Profili</span>
+                Dil
               </button>
             </div>
           ) : (
@@ -52,3 +62,6 @@ const SocialNavbar = () => {
 };
 
 export default SocialNavbar;
+
+
+

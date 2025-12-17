@@ -11,4 +11,5 @@ namespace ZeriIm.Application.Services
     {
         Task<string> SaveFileAsync(IFormFile file);
     }
+
 }

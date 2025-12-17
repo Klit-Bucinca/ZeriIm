@@ -15,7 +15,5 @@ namespace ZeriIm.Application.DTOs.Auth
         public string? RefreshToken { get; set; }         // refresh token
         public DateTime? ExpiresAt { get; set; }          // kur skadon access token
         public string? Message { get; set; }
-
-        public List<string>? Roles { get; set; }
     }
 }

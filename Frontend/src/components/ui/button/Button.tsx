@@ -1,15 +1,15 @@
 import { ReactNode } from "react";
 
 interface ButtonProps {
-  children: ReactNode; // Teksti ose përmbajtja e butonit
-  size?: "sm" | "md"; // Madhësia e butonit
-  variant?: "primary" | "outline"; // Varianti i butonit
-  startIcon?: ReactNode; // Ikona para tekstit
-  endIcon?: ReactNode; // Ikona pas tekstit
-  onClick?: () => void; // Handler për klikimin
-  disabled?: boolean; // Gjendja e çaktivizuar
-  className?: string; // Klasa ekstra
-  type?: "button" | "submit" | "reset"; // Tipi i butonit
+  children: ReactNode; // Button text or content
+  size?: "sm" | "md"; // Button size
+  variant?: "primary" | "outline"; // Button variant
+  startIcon?: ReactNode; // Icon before the text
+  endIcon?: ReactNode; // Icon after the text
+  onClick?: () => void; // Click handler
+  disabled?: boolean; // Disabled state
+  className?: string; // Disabled state
+  type?: "button" | "submit" | "reset";
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -21,15 +21,15 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   className = "",
   disabled = false,
-  type = "button", // Default type
+  type = "button",
 }) => {
-  // Klasa për madhësinë
+  // Size Classes
   const sizeClasses = {
     sm: "px-4 py-3 text-sm",
     md: "px-5 py-3.5 text-sm",
   };
 
-  // Klasa për variantin
+  // Variant Classes
   const variantClasses = {
     primary:
       "bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300",
@@ -39,10 +39,12 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      type={type} // <- shumë e rëndësishme për forma
       className={`inline-flex items-center justify-center gap-2 rounded-lg transition ${className} ${
         sizeClasses[size]
-      } ${variantClasses[variant]} ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
+      } ${variantClasses[variant]} ${
+        disabled ? "cursor-not-allowed opacity-50" : ""
+      }`}
+      type={type}
       onClick={onClick}
       disabled={disabled}
     >

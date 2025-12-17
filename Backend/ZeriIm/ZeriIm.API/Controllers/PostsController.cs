@@ -28,16 +28,16 @@ public class PostsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] PostSearchCriteria criteria, CancellationToken ct)
+    public async Task<IActionResult> Get([FromQuery] PostSearchCriteria criteria, [FromQuery] Guid? currentUserId, CancellationToken ct)
     {
-        var result = await _posts.SearchAsync(criteria, ct);
+        var result = await _posts.SearchAsync(criteria, currentUserId, ct);
         return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
+    public async Task<IActionResult> GetById(Guid id, [FromQuery] Guid? currentUserId, CancellationToken ct)
     {
-        var post = await _posts.GetByIdAsync(id, null, ct);
+        var post = await _posts.GetByIdAsync(id, currentUserId, ct);
         if (post is null) return NotFound();
         return Ok(post);
     }

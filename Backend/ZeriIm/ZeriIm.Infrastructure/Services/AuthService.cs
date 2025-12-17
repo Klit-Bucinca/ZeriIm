@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using ZeriIm.Application.DTOs.Auth;
-using ZeriIm.Application.Interfaces;
-using ZeriIm.Domain;
-
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using BCrypt.Net;
 
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-
-
-
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using ZeriIm.Application.DTOs.Auth;
+using ZeriIm.Application.Interfaces;
+using ZeriIm.Domain.Entities;
+using ZeriIm.Ports.Outbound;
 
 namespace ZeriIm.Infrastructure.Services
 {
@@ -46,11 +39,11 @@ namespace ZeriIm.Infrastructure.Services
                 };
             }
 
-            // Ruaj file në disk (Uploads/profile-images)
+            // Ruaj file në disk (p.sh /uploads/profiles/)
             string profileImagePath = null;
             if (dto.ProfileImage != null)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads/profile-images");
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/profiles");
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
 
@@ -62,7 +55,7 @@ namespace ZeriIm.Infrastructure.Services
                     await dto.ProfileImage.CopyToAsync(fileStream);
                 }
 
-                profileImagePath = "uploads/profile-images/" + uniqueFileName; // ruaj path relativ
+                profileImagePath = "/uploads/profiles/" + uniqueFileName; // ruaj path për front
             }
 
             // Hash password
@@ -75,7 +68,7 @@ namespace ZeriIm.Infrastructure.Services
                 Email = dto.Email,
                 PasswordHash = passwordHash,
                 Role = "Citizen",
-                ProfileImagePath = profileImagePath,
+                ProfileImagePath = profileImagePath, // <--- ruaj path nga file
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
@@ -98,14 +91,23 @@ namespace ZeriIm.Infrastructure.Services
         {
             var user = await _userRepository.GetByEmailAsync(dto.Email);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            if (user == null)
             {
                 return new LoginResponseDto
                 {
                     Success = false,
                     AccessToken = null,
-                    RefreshToken = null,
-                    Roles = null
+                    RefreshToken = null
+                };
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            {
+                return new LoginResponseDto
+                {
+                    Success = false,
+                    AccessToken = null,
+                    RefreshToken = null
                 };
             }
 
@@ -117,6 +119,7 @@ namespace ZeriIm.Infrastructure.Services
 
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+
             await _userRepository.UpdateAsync(user);
 
             return new LoginResponseDto
@@ -124,11 +127,9 @@ namespace ZeriIm.Infrastructure.Services
                 Success = true,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(30),
-                Roles = new List<string> { user.Role }  // <-- Këtu vendos role
+                ExpiresAt = DateTime.UtcNow.AddMinutes(30)
             };
         }
-
 
         // ============================
         // Refresh Token
@@ -143,12 +144,14 @@ namespace ZeriIm.Infrastructure.Services
                 {
                     Success = false,
                     AccessToken = null,
-                    RefreshToken = null,
-                    Roles = null
+                    RefreshToken = null
                 };
             }
 
+            // Create new access token
             var newAccessToken = GenerateJwtToken(user);
+
+            // New refresh token
             var newRefreshToken = GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
@@ -160,11 +163,9 @@ namespace ZeriIm.Infrastructure.Services
                 Success = true,
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(30),
-                Roles = new List<string> { user.Role }  // <-- Këtu gjithashtu
+                ExpiresAt = DateTime.UtcNow.AddMinutes(30)
             };
         }
-
 
         // ============================
         // Helper Methods

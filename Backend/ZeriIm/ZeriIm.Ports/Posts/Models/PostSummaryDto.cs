@@ -14,6 +14,7 @@ public sealed class PostSummaryDto
     public string Municipality { get; init; } = null!;
     public string CategoryName { get; init; } = null!;
     public int Score { get; init; }
+    public int UserVote { get; init; }
     public int CommentCount { get; init; }
     public DateTime CreatedAt { get; init; }
     public IReadOnlyCollection<string> ImageUrls { get; init; } = Array.Empty<string>();

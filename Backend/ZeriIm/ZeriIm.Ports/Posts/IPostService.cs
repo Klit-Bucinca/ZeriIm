@@ -19,5 +19,6 @@ public interface IPostService
         CancellationToken cancellationToken = default);
 
     Task<PagedResult<PostSummaryDto>> SearchAsync(PostSearchCriteria criteria,
+        Guid? currentUserId = default,
         CancellationToken cancellationToken = default);
 }

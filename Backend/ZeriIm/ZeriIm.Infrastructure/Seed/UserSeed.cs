@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using ZeriIm.Domain;
-
-using ZeriIm.Domain.Users;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using ZeriIm.Domain.Entities;
 
 namespace ZeriIM.Infrastructure.Database.Seed
 {

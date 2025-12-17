@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import VoteButtons from './VoteButtons';
+import { useAuth } from '../../context/AuthContext';
 
 const PostCard = ({ post, onRefresh }) => {
   const navigate = useNavigate();
+  const { userId } = useAuth();
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
@@ -259,6 +261,7 @@ const PostCard = ({ post, onRefresh }) => {
         <VoteButtons
           postId={post?.id ?? post?.Id}
           currentScore={post?.score ?? post?.Score ?? 0}
+          initialVote={post?.userVote ?? post?.UserVote ?? 0}
           onRefresh={onRefresh}
         />
         <Link

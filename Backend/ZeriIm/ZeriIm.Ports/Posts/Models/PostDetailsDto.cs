@@ -16,6 +16,7 @@ public sealed class PostDetailsDto
     public string Municipality { get; init; } = null!;
     public string CategoryName { get; init; } = null!;
     public int Score { get; init; }
+    public int UserVote { get; init; }
     public IReadOnlyCollection<string> ImageUrls { get; init; } = Array.Empty<string>();
     public DateTime CreatedAt { get; init; }
     public DateTime? UpdatedAt { get; init; }

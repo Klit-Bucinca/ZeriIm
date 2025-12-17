@@ -7,7 +7,7 @@ using ZeriIm.Application.DTOs.Auth;
 
 namespace ZeriIm.Application.Interfaces
 {
-    public interface IAuthService
+   public interface  IAuthService
     {
         Task<RegisterUserResponseDto> RegisterAsync(RegisterUserDto dto);
         Task<LoginResponseDto> LoginAsync(LoginUserDto dto);

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
+import { EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
+import { useAuth } from "../../context/AuthContext";
 
 export default function SignInForm() {
   const [email, setEmail] = useState("");
@@ -16,60 +16,45 @@ export default function SignInForm() {
   const [serverError, setServerError] = useState("");
 
   const navigate = useNavigate();
-
-  // Përdor environment variable për BASE_URL ose default
-  const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:7038";
+  const { login, loading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors: { email?: string; password?: string } = {};
 
-    if (!email) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Invalid email format";
+    if (!email) newErrors.email = "Email-i duhet";
+    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Formati i email-it nuk është i vlefshëm";
 
-    if (!password) newErrors.password = "Password is required";
-    else if (password.length < 6) newErrors.password = "Password must be at least 6 characters";
+    if (!password) newErrors.password = "Fjalëkalimi duhet";
+    else if (password.length < 6) newErrors.password = "Fjalëkalimi të paktën 6 karaktere";
 
     setErrors(newErrors);
     setServerError("");
 
     if (Object.keys(newErrors).length === 0) {
-      try {
-        const response = await axios.post(`${BASE_URL}/scalar/v1/auth/login`, {
-          email,
-          password,
-        });
-
-        // Supozojmë që backend kthen diçka si: { token: "...", role: "Admin" }
-        const { token, role } = response.data;
-
-        // Ruaj token dhe role në localStorage
-        localStorage.setItem("token", token);
-        localStorage.setItem("role", role);
-
-        // Ridrejtimi sipas role-it
-        if (role === "Admin") navigate("/dashboard/Home");
-        else if (role === "Citizen") navigate("/pages/UserHome");
-        else if (role === "Moderator") navigate("/pages/ModeratorHome");
-        else setServerError("Unknown user role");
-
-      } catch (error: any) {
-        if (error.response && error.response.data && error.response.data.message) {
-          setServerError(error.response.data.message);
-        } else {
-          setServerError("Login failed. Please try again.");
-        }
-        console.error("Login error:", error);
+      const result = await login({ email, password });
+      if (!result.success) {
+        setServerError(result.message || "Hyrja dështoi. Provo përsëri.");
+        return;
       }
+
+      // Default redirect to feed; admin/mod go to dashboard.
+      const isHardcodedAdmin =
+        email.trim().toLowerCase() === "admin@admin.admin" &&
+        password === "AdminAdmin";
+      const nextRole = result.role || (isHardcodedAdmin ? "Admin" : undefined);
+      const isAdminUser = nextRole === "Admin" || nextRole === "Moderator" || isHardcodedAdmin;
+
+      navigate(isAdminUser ? "/dashboard" : "/posts");
     }
   };
 
   return (
     <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
       <div>
-        <h1 className="mb-2 font-semibold text-gray-800 text-title-sm">Sign In</h1>
-        <p className="text-sm text-gray-500">Enter your email and password to sign in!</p>
+        <h1 className="mb-2 font-semibold text-gray-800 text-title-sm">Hyr</h1>
+        <p className="text-sm text-gray-500">Shkruaj email-in dhe fjalëkalimin për t’u lidhur.</p>
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-6">
           <div>
@@ -83,11 +68,11 @@ export default function SignInForm() {
           </div>
 
           <div>
-            <Label>Password <span className="text-error-500">*</span></Label>
+            <Label>Fjalëkalimi <span className="text-error-500">*</span></Label>
             <div className="relative">
               <Input
                 type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
+                placeholder="Shkruaj fjalëkalimin"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -104,21 +89,21 @@ export default function SignInForm() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Checkbox checked={isChecked} onChange={setIsChecked} />
-              <span className="text-gray-700 text-theme-sm">Keep me logged in</span>
+              <span className="text-gray-700 text-theme-sm">Më mbaj të lidhur</span>
             </div>
-            <Link to="/reset-password" className="text-sm text-brand-500">Forgot password?</Link>
+            <Link to="/reset-password" className="text-sm text-brand-500">Harrove fjalëkalimin?</Link>
           </div>
 
           {serverError && <p className="text-error-500 text-sm mt-1">{serverError}</p>}
 
-          <Button type="submit" className="w-full" size="sm">
-            Sign in
+          <Button type="submit" className="w-full" size="sm" disabled={loading}>
+            {loading ? "Duke u futur..." : "Hyr"}
           </Button>
         </form>
 
         <p className="mt-5 text-sm text-center text-gray-700">
-          Don't have an account?{" "}
-          <Link to="/signup" className="text-brand-500">Sign Up</Link>
+          Nuk ke llogari?{" "}
+          <Link to="/signup" className="text-brand-500">Regjistrohu</Link>
         </p>
       </div>
     </div>

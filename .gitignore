@@ -1,0 +1,24 @@
+# ======================
+# .NET
+# ======================
+**/bin/
+**/obj/
+.vs/
+**/*.csproj.user
+
+# ======================
+# Frontend (Vite / React)
+# ======================
+**/node_modules/
+.env
+.env.local
+.env.*.local
+
+# ======================
+# OS / Editor junk
+# ======================
+.DS_Store
+Thumbs.db
+
+# Uploaded files
+Backend/**/wwwroot/uploads/

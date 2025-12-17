@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Zerilm.Ports.Shared;
+namespace ZeriIm.Ports.Shared;
 
 public sealed class PagedResult<T>
 {

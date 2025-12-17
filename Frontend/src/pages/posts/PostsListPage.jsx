@@ -3,6 +3,7 @@ import { getPosts } from '../../api/postService';
 import PostCard from '../../components/posts/PostCard';
 import PostComposerPreview from '../../components/posts/PostComposerPreview';
 import CreatePostModal from '../../components/posts/CreatePostModal';
+import { useAuth } from '../../context/AuthContext';
 
 const PAGE_SIZE = 10;
 
@@ -41,6 +42,7 @@ const Pagination = ({ page, pageSize, totalCount, onPageChange }) => {
 };
 
 const PostsListPage = () => {
+  const { userId } = useAuth();
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -64,6 +66,7 @@ const PostsListPage = () => {
           Municipality: municipality || undefined,
           SearchTerm: searchTerm || undefined,
           SortBy: sortBy,
+          currentUserId: userId || undefined,
         });
 
         const items = data?.Items ?? data?.items ?? [];
@@ -78,7 +81,7 @@ const PostsListPage = () => {
         setLoading(false);
       }
     },
-    [categoryId, municipality, searchTerm, sortBy]
+    [categoryId, municipality, searchTerm, sortBy, userId]
   );
 
   useEffect(() => {
