@@ -14,13 +14,6 @@ public class PostsController : ControllerBase
 
     private static readonly Guid SystemAuthorId = Guid.Parse("00000000-0000-0000-0000-000000000001");
 
-    private static readonly Dictionary<Guid, string> Municipalities = new()
-    {
-        { Guid.Parse("00000000-0000-0000-0000-000000001111"), "Prishtine" },
-        { Guid.Parse("00000000-0000-0000-0000-000000001112"), "Prizren" },
-        { Guid.Parse("00000000-0000-0000-0000-000000001113"), "Gjakove" },
-    };
-
     public PostsController(IPostService posts, IWebHostEnvironment env)
     {
         _posts = posts;
@@ -52,7 +45,7 @@ public class PostsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromForm] CreatePostForm form, CancellationToken ct)
     {
-        if (!Municipalities.TryGetValue(form.MunicipalityId, out var municipalityName))
+        if (!MunicipalitiesStore.TryGet(form.MunicipalityId, out var municipalityName))
             return BadRequest("Municipality not found.");
 
         var uploadRoot = _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");

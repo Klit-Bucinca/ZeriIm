@@ -8,11 +8,13 @@ public sealed class CommentService : ICommentService
 {
     private readonly IPostRepository _posts;
     private readonly ICommentRepository _comments;
+    private readonly IUserRepository _users;
 
-    public CommentService(IPostRepository posts, ICommentRepository comments)
+    public CommentService(IPostRepository posts, ICommentRepository comments, IUserRepository users)
     {
         _posts = posts;
         _comments = comments;
+        _users = users;
     }
 
     public async Task<Guid> CreateAsync(CreateCommentRequest request, CancellationToken ct = default)
@@ -53,7 +55,10 @@ public sealed class CommentService : ICommentService
         var comment = await _comments.GetByIdAsync(commentId, ct)
                       ?? throw new InvalidOperationException("Comment not found.");
 
-        if (comment.AuthorId != currentUserId)
+        var user = await _users.GetByIdAsync(currentUserId);
+        var isAdmin = user?.Role == "Admin" || user?.Role == "Moderator";
+
+        if (!isAdmin && comment.AuthorId != currentUserId)
             throw new InvalidOperationException("Not allowed to edit this comment.");
 
         comment.Edit(newContent);
@@ -65,7 +70,10 @@ public sealed class CommentService : ICommentService
         var comment = await _comments.GetByIdAsync(commentId, ct)
                       ?? throw new InvalidOperationException("Comment not found.");
 
-        if (comment.AuthorId != currentUserId)
+        var user = await _users.GetByIdAsync(currentUserId);
+        var isAdmin = user?.Role == "Admin" || user?.Role == "Moderator";
+
+        if (!isAdmin && comment.AuthorId != currentUserId)
             throw new InvalidOperationException("Not allowed to delete this comment.");
 
         await _comments.DeleteAsync(comment, ct);

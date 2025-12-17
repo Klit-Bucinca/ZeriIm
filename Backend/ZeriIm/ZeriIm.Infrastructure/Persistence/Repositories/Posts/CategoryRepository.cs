@@ -26,4 +26,24 @@ public class CategoryRepository : ICategoryRepository
     {
         return await _db.Categories.AsNoTracking().OrderBy(c => c.Name).ToListAsync(ct);
     }
+
+    public async Task AddAsync(Category category, CancellationToken ct = default)
+    {
+        _db.Categories.Add(category);
+        await _db.SaveChangesAsync(ct);
+    }
+
+    public async Task UpdateAsync(Category category, CancellationToken ct = default)
+    {
+        _db.Categories.Update(category);
+        await _db.SaveChangesAsync(ct);
+    }
+
+    public async Task DeleteAsync(Guid id, CancellationToken ct = default)
+    {
+        var entity = await _db.Categories.FirstOrDefaultAsync(c => c.Id == id, ct);
+        if (entity is null) return;
+        _db.Categories.Remove(entity);
+        await _db.SaveChangesAsync(ct);
+    }
 }

@@ -75,7 +75,10 @@ public sealed class PostService : IPostService
         var post = await _posts.GetByIdAsync(postId, ct)
                    ?? throw new InvalidOperationException("Post not found.");
 
-        if (post.AuthorId != currentUserId)
+        var user = await _users.GetByIdAsync(currentUserId);
+        var isAdmin = user?.Role == "Admin" || user?.Role == "Moderator";
+
+        if (!isAdmin && post.AuthorId != currentUserId)
             throw new InvalidOperationException("Not allowed to delete this post.");
 
         await _posts.DeleteAsync(post, ct);

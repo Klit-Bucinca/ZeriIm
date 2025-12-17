@@ -254,7 +254,6 @@ namespace ZeriIm.Infrastructure.Migrations
 
                     b.Navigation("Votes");
                 });
-
 #pragma warning restore 612, 618
         }
     }
