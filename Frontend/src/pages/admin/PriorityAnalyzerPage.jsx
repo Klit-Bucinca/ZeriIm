@@ -113,7 +113,7 @@ const PriorityAnalyzerPage = () => {
         <button
           type="button"
           onClick={load}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:brightness-105"
+          className="rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 transition hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
         >
           Rifresko
         </button>
