@@ -7,9 +7,7 @@ import {
   CalenderIcon,
   ListIcon,
   GridIcon,
-  
-} 
-from "../icons";
+} from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -131,13 +129,9 @@ const AppSidebar: React.FC = () => {
             {(isExpanded || isHovered || isMobileOpen) && <span>Dalje</span>}
           </button>
         </div>
-		
       </div>
     </aside>
-  )
-  ;
-}
-;
-
+  );
+};
 
 export default AppSidebar;
