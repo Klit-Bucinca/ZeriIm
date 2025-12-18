@@ -156,7 +156,7 @@ const UsersPage = () => {
                             type="button"
                             onClick={handleSave}
                             disabled={saving}
-                            className="rounded-md bg-primary px-3 py-1 text-sm font-semibold text-white transition hover:brightness-105 disabled:opacity-60"
+                            className="rounded-md bg-blue-500 px-3 py-1 text-sm font-semibold text-white transition hover:bg-blue-600 disabled:opacity-60"
                           >
                             Ruaj
                           </button>

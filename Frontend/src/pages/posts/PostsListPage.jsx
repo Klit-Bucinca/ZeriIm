@@ -4,6 +4,7 @@ import PostCard from '../../components/posts/PostCard';
 import PostComposerPreview from '../../components/posts/PostComposerPreview';
 import CreatePostModal from '../../components/posts/CreatePostModal';
 import { useAuth } from '../../context/AuthContext';
+import { getMunicipalities } from '../../api/municipalityService';
 
 const PAGE_SIZE = 10;
 
@@ -48,6 +49,7 @@ const PostsListPage = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [municipality, setMunicipality] = useState('');
+  const [municipalityOptions, setMunicipalityOptions] = useState([]);
   const [categoryId, setCategoryId] = useState('');
   const [sortBy, setSortBy] = useState('Newest');
   const [loading, setLoading] = useState(false);
@@ -85,6 +87,9 @@ const PostsListPage = () => {
   );
 
   useEffect(() => {
+    getMunicipalities()
+      .then(({ data }) => setMunicipalityOptions(Array.isArray(data) ? data : []))
+      .catch(() => setMunicipalityOptions([]));
     fetchPosts(page);
   }, [page, fetchPosts]);
 
@@ -145,13 +150,18 @@ const PostsListPage = () => {
           placeholder="Kerko postime..."
           className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 shadow-theme-xs focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white"
         />
-        <input
-          type="text"
+        <select
           value={municipality}
           onChange={handleMunicipalityChange}
-          placeholder="Municipaliteti"
           className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 shadow-theme-xs focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-        />
+        >
+          <option value="">Të gjitha komunat</option>
+          {municipalityOptions.map((m) => (
+            <option key={m.Id || m.id} value={m.Name || m.name}>
+              {m.Name || m.name}
+            </option>
+          ))}
+        </select>
         <select
           value={categoryId}
           onChange={handleCategoryChange}

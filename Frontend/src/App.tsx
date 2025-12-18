@@ -16,6 +16,7 @@ import { AuthProvider } from "./context/AuthContext";
 
 import AppLayout from "./layout/AppLayout";
 import UsersPage from "./pages/admin/UsersPage";
+import MunicipalitiesPage from "./pages/admin/MunicipalitiesPage";
 
 export default function App() {
   return (
@@ -34,11 +35,12 @@ export default function App() {
           </Route>
 
       {/* ================= DASHBOARD / ADMIN ================= */}
-      <Route element={<ProtectedRoute requireAdmin />}>
-        <Route element={<AppLayout />}>
-          <Route path="/dashboard" element={<UsersPage />} />
-        </Route>
-      </Route>
+          <Route element={<ProtectedRoute requireAdmin />}>
+            <Route element={<AppLayout />}>
+              <Route path="/dashboard" element={<UsersPage />} />
+              <Route path="/municipalities" element={<MunicipalitiesPage />} />
+            </Route>
+          </Route>
 
           {/* ================= AUTH ================= */}
           <Route path="/signin" element={<SignIn />} />

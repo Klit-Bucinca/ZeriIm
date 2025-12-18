@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getPostById } from '../../api/postService';
+import { getPostById, deletePost } from '../../api/postService';
 import { createComment, deleteComment } from '../../api/commentService';
 import VoteButtons from '../../components/posts/VoteButtons';
 import { useAuth } from '../../context/AuthContext';
@@ -121,9 +121,12 @@ const CommentThread = ({
               >
                 Pergjigju
               </button>
-              {userId &&
-                (comment.AuthorId === userId ||
-                  comment.authorId === userId) && (
+              {(isAdmin ||
+                userId &&
+                  (comment.AuthorId === userId ||
+                    comment.authorId === userId ||
+                    comment.UserId === userId ||
+                    comment.userId === userId)) && (
                   <button
                     type="button"
                     onClick={() => onDelete?.(comment.Id || comment.id)}
@@ -173,7 +176,7 @@ const CommentThread = ({
 
 const PostDetailsPage = () => {
   const { id: postId } = useParams();
-  const { userId, isAuthenticated, user } = useAuth();
+  const { userId, isAuthenticated, user, isAdmin } = useAuth();
   const currentUserName = user?.username || user?.email || user?.name || null;
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -181,6 +184,7 @@ const PostDetailsPage = () => {
   const [commentSubmitting, setCommentSubmitting] = useState(false);
   const [replyingTo, setReplyingTo] = useState(null);
   const [score, setScore] = useState(0);
+  const [deletingPost, setDeletingPost] = useState(false);
 
   const loadPost = useCallback(async () => {
     if (!postId) return;
@@ -261,6 +265,20 @@ const PostDetailsPage = () => {
     }
   };
 
+  const handleDeletePost = async () => {
+    if (!postId || !userId || !isAuthenticated) return;
+    if (!window.confirm('Fshi këtë postim?')) return;
+    setDeletingPost(true);
+    try {
+      await deletePost(postId, { currentUserId: userId });
+      window.location.href = '/posts';
+    } catch {
+      // ignore
+    } finally {
+      setDeletingPost(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-6 text-center text-gray-700 dark:text-gray-200">
@@ -304,7 +322,8 @@ const PostDetailsPage = () => {
                 Publikuar me {new Date(post.CreatedAt).toLocaleDateString('sq-AL')}
               </p>
             </div>
-            {postId && (
+            <div className="flex items-center gap-3">
+              {postId && (
               <VoteButtons
                 postId={postId}
                 currentScore={score}
@@ -317,7 +336,18 @@ const PostDetailsPage = () => {
                 }
                 onScoreChange={setScore}
               />
-            )}
+              )}
+              {isAdmin && (
+                <button
+                  type="button"
+                  onClick={handleDeletePost}
+                  disabled={deletingPost}
+                  className="rounded-md border border-red-500 px-3 py-1.5 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-500/70 dark:text-red-300 dark:hover:bg-red-900/30 disabled:opacity-60"
+                >
+                  {deletingPost ? 'Duke fshirë...' : 'Fshi postimin'}
+                </button>
+              )}
+            </div>
           </div>
 
           <PostImagesGallery images={post?.ImageUrls} />
