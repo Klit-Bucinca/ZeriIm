@@ -4,6 +4,7 @@ import { getCategories } from '../../api/categoryService';
 import { getMunicipalities } from '../../api/municipalityService';
 
 const defaultValues = {
+  title: '',
   content: '',
   categoryId: '',
   municipalityId: '',
@@ -111,6 +112,7 @@ const CreatePostModal = ({ open, onClose, onPostCreated }) => {
 
   const canSubmit = useMemo(
     () =>
+      values.title.trim().length > 0 &&
       values.content.trim().length > 0 &&
       values.categoryId &&
       values.municipalityId,
@@ -124,10 +126,10 @@ const CreatePostModal = ({ open, onClose, onPostCreated }) => {
     setSubmitError('');
     try {
       const formData = new FormData();
+      formData.append('Title', values.title.trim());
       formData.append('Content', values.content);
       formData.append('CategoryId', values.categoryId);
       formData.append('MunicipalityId', values.municipalityId);
-      formData.append('Title', '');
       values.files.forEach((file) => formData.append('Images', file));
 
       await createPost(formData, {
@@ -181,6 +183,18 @@ const CreatePostModal = ({ open, onClose, onPostCreated }) => {
                 {submitError}
               </div>
             )}
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                Titulli
+              </label>
+              <input
+                type="text"
+                value={values.title}
+                onChange={handleFieldChange('title')}
+                placeholder="Shkruaj titullin"
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-theme-xs focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+            </div>
             <textarea
               value={values.content}
               onChange={handleFieldChange('content')}
