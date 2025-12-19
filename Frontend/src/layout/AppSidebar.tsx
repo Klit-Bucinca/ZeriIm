@@ -1,5 +1,13 @@
 import { Link, useLocation, useNavigate } from "react-router";
-import { PageIcon, GridIcon, PlugInIcon, HorizontaLDots } from "../icons";
+import {
+  PageIcon,
+  PlugInIcon,
+  HorizontaLDots,
+  UserCircleIcon,
+  CalenderIcon,
+  ListIcon,
+  GridIcon,
+} from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -11,9 +19,10 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { name: "Postimet", icon: <PageIcon />, path: "/posts" },
-  { name: "Përdoruesit", icon: <GridIcon />, path: "/dashboard" },
-  { name: "Komunat", icon: <GridIcon />, path: "/municipalities" },
-  { name: "Kategorite", icon: <GridIcon />, path: "/categories" },
+  { name: "Përdoruesit", icon: <UserCircleIcon />, path: "/dashboard" },
+  { name: "Komunat", icon: <CalenderIcon />, path: "/municipalities" },
+  { name: "Kategoritë", icon: <ListIcon />, path: "/categories" },
+  { name: "Prioritetet", icon: <GridIcon />, path: "/priority" },
 ];
 
 const AppSidebar: React.FC = () => {

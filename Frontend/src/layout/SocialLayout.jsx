@@ -3,7 +3,7 @@ import SocialNavbar from './SocialNavbar';
 
 const SocialLayout = () => {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+    <div className="min-h-screen text-gray-900 dark:bg-gray-900 dark:text-gray-100">
       <SocialNavbar />
       <main className="mx-auto w-full max-w-3xl px-4 py-6 pt-20">
         <Outlet />

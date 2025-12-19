@@ -126,7 +126,18 @@ const PostsListPage = () => {
   };
 
   return (
-    <div className="p-6">
+    <>
+      <div
+        className="fixed inset-0 -z-10 w-screen h-screen"
+        style={{
+          backgroundImage: 'url(/images/my-bg.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+        }}
+      />
+      <div className="p-6">
       <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
@@ -228,6 +239,7 @@ const PostsListPage = () => {
         onPageChange={setPage}
       />
     </div>
+    </>
   );
 };
 

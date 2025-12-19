@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
-import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
 import { useAuth } from "../../context/AuthContext";
 
@@ -11,7 +10,6 @@ export default function SignInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [serverError, setServerError] = useState("");
 
@@ -84,14 +82,6 @@ export default function SignInForm() {
               </span>
             </div>
             {errors.password && <p className="text-error-500 text-sm mt-1">{errors.password}</p>}
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Checkbox checked={isChecked} onChange={setIsChecked} />
-              <span className="text-gray-700 text-theme-sm">Më mbaj të lidhur</span>
-            </div>
-            <Link to="/reset-password" className="text-sm text-brand-500">Harrove fjalëkalimin?</Link>
           </div>
 
           {serverError && <p className="text-error-500 text-sm mt-1">{serverError}</p>}
