@@ -58,24 +58,38 @@ const PostsListPage = () => {
   const [error, setError] = useState('');
   const [isComposerOpen, setIsComposerOpen] = useState(false);
 
+  const sortStrategies = {
+    Newest: {
+      param: 'Newest',
+      sorter: (a, b) =>
+        new Date(b.CreatedAt || b.createdAt) - new Date(a.CreatedAt || a.createdAt),
+    },
+    MostUpvoted: {
+      param: 'MostUpvoted',
+      sorter: (a, b) => (b.Score ?? b.score ?? 0) - (a.Score ?? a.score ?? 0),
+    },
+  };
+
   const fetchPosts = useCallback(
     async (pageToLoad) => {
       setLoading(true);
       setError('');
       try {
+        const strategy = sortStrategies[sortBy] || sortStrategies.Newest;
         const { data } = await getPosts({
           Page: pageToLoad,
           PageSize: PAGE_SIZE,
           CategoryId: categoryId || undefined,
           Municipality: municipality || undefined,
           SearchTerm: searchTerm || undefined,
-          SortBy: sortBy,
+          SortBy: strategy.param,
           currentUserId: userId || undefined,
         });
 
         const items = data?.Items ?? data?.items ?? [];
         const total = data?.TotalCount ?? data?.totalCount ?? 0;
-        setPosts(items);
+        const sorted = strategy.sorter ? [...items].sort(strategy.sorter) : items;
+        setPosts(sorted);
         setTotalCount(total);
       } catch (err) {
         setError('Nuk mund te ngarkohen postimet per momentin.');

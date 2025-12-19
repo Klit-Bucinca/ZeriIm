@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getTopPriority } from '../../api/priorityService';
+import { getTopPriorityNormalized } from '../../api/priorityService';
 
 const now = new Date();
 const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
@@ -22,8 +22,8 @@ const PriorityAnalyzerPage = () => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await getTopPriority({ year, month, limit });
-      setData(data?.Items || data?.items || []);
+      const items = await getTopPriorityNormalized({ year, month, limit });
+      setData(items);
     } catch {
       setError('Nuk mund të ngarkohen prioritetet.');
       setData([]);
@@ -131,13 +131,13 @@ const PriorityAnalyzerPage = () => {
         <div className="mt-6 space-y-6 print:block">
           {data.map((group) => (
             <div
-              key={group.Municipality || group.municipality}
-              id={`group-${group.Municipality || group.municipality}`}
+              key={group.municipality}
+              id={`group-${group.municipality}`}
               className="rounded-lg border border-gray-200 bg-white p-4 shadow-theme-sm dark:border-gray-700 dark:bg-gray-800"
             >
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {group.Municipality || group.municipality}
+                  {group.municipality}
                 </h2>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-500 dark:text-gray-300">
@@ -145,7 +145,7 @@ const PriorityAnalyzerPage = () => {
                   </span>
                   <button
                     type="button"
-                    onClick={() => handlePrintGroup(`group-${group.Municipality || group.municipality}`)}
+                    onClick={() => handlePrintGroup(`group-${group.municipality}`)}
                     className="rounded-md border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-800 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
                   >
                     Printo / Shkarko
@@ -153,19 +153,19 @@ const PriorityAnalyzerPage = () => {
                 </div>
               </div>
               <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {(group.Posts || group.posts || []).map((p, idx) => {
-                  const thumb = resolveImage(p.ThumbnailUrl || p.thumbnailUrl);
+                {(group.posts || []).map((p, idx) => {
+                  const thumb = resolveImage(p.thumbnailUrl);
                   return (
                     <div
-                      key={p.Id || p.id}
+                      key={p.id}
                       className="rounded-md border border-gray-100 bg-gray-50 p-3 text-sm dark:border-gray-700 dark:bg-gray-900"
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-gray-900 dark:text-white line-clamp-2">
-                          #{idx + 1} {p.Title || p.title}
+                          #{idx + 1} {p.title}
                         </span>
                         <span className="text-xs font-medium text-primary">
-                          {p.Score ?? p.score ?? 0} vota
+                          {p.score} vota
                         </span>
                       </div>
                       {thumb && (
@@ -178,12 +178,12 @@ const PriorityAnalyzerPage = () => {
                         </div>
                       )}
                       <p className="mt-2 text-gray-700 dark:text-gray-200 line-clamp-4">
-                        {p.Content || p.content}
+                        {p.content}
                       </p>
                       <div className="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-300">
-                        <span>{p.CategoryName || p.categoryName || '—'}</span>
+                        <span>{p.categoryName || '—'}</span>
                         <span>
-                          {new Date(p.CreatedAt || p.createdAt).toLocaleDateString('sq-AL')}
+                          {p.createdAt ? new Date(p.createdAt).toLocaleDateString('sq-AL') : ''}
                         </span>
                       </div>
                     </div>
