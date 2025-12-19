@@ -44,6 +44,16 @@ public class PostRepository : IPostRepository
 
     public async Task DeleteAsync(Post post, CancellationToken ct = default)
     {
+        // Remove comments explicitly because Post -> Comments is configured with NoAction
+        var comments = await _db.Comments
+            .Where(c => c.PostId == post.Id)
+            .ToListAsync(ct);
+        if (comments.Count > 0)
+        {
+            _db.Comments.RemoveRange(comments);
+        }
+
+        // Votes and Images are cascade, so just remove the post
         _db.Posts.Remove(post);
         await _db.SaveChangesAsync(ct);
     }
